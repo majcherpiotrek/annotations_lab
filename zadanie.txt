@@ -1,0 +1,18 @@
+﻿Napisz program, ktĂłry pozwoli zaĹadowaÄ klasy z adnotacjami oraz utworzyÄ obiekty tych klas. 
+Do utworzenia obiektu danej klasy powinien sĹuĹźyÄ dynamicznie tworzony formularz. 
+Dane wprowadzne na formularzu powinny byÄ wykorzystane do utworzenia obiektu i ustawienia w jego pola odpowiednich wartoĹci.
+Program nie musi nic wiÄcej z obiektami robiÄ (w Äwiczeniu chodzi jedynie o zapoznanie siÄ z mechanizmem tworzenia i wykorzystania adnotacji).
+
+ZawartoĹÄ formularza zaleĹźeÄ ma od adnotacji zamieszczonych w klasie.
+Na formularzu wyĹwietlane majÄ byÄ etykiety i pola na wprowadzanie danych, ale tylko dla tych pĂłl klasy, ktĂłre majÄ specjalne adnotacje.
+Te specjalne adnotacje majÄ dostarczaÄ informacji o etykietach wyĹwietlanych przy polach do wprowadzania danych.
+ZaĹoĹźono, Ĺźe obsĹugiwane bÄdÄ pola klasy typĂłw podstawowych oraz String.
+ZaĹoĹźono, Ĺźe w klasie bÄdÄ istnieÄ odpowiednie gettery i settery oraz bezargumentowy konstruktor.
+
+OprĂłcz specjalnych adnotacji powinny byÄ obsĹuĹźone rĂłwnieĹź adnotacje z pakietu javax.validation.constraints. 
+MajÄ one pomĂłc w walidacji wartoĹci przekazanych na formularzu wprowadzania danych. 
+Walidacja moĹźe odbywaÄ siÄ na dwa sposoby:
+1. jak w przykĹadowych testach (ĹşrĂłdĹa w zaĹÄczeniu): najpierw jest tworzony obiekt, potem obiekt ten jest sprawdzony walidatorem, i jeĹli sÄ jakieĹ bĹÄdy, na formularzu pojawiajÄ siÄ odpowiednie komunikaty.
+2. przez przeĹwietlenie adnotacji: zanim odpalony zostanie odpowiedni setter aplikacja odczyta z adnotacji, czy wartoĹÄ odczytana z pola speĹnia warunki okreĹlone warunki, jeĹli nie - pojawia siÄ odpowiedni komunikat , jeĹli tak - nastÄpuje przepisanie wartoĹci do obiektu odpowiednim setterem.
+
+MateriaĹy: https://docs.oracle.com/javaee/6/tutorial/doc/gircz.html, http://www.baeldung.com/javax-validation, http://tomasz.kubik.staff.iiar.pwr.wroc.pl/dydaktyka/Java/Zadania/example.zip
