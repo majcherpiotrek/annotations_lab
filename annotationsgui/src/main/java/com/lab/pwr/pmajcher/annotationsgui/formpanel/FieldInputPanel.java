@@ -14,6 +14,7 @@ public class FieldInputPanel extends JPanel{
 	private Field relatedModelField;
 	private Method setter;
 	private Method getter;
+	private JLabel errorLabel;
 	
 	public FieldInputPanel(JLabel inputLabel, JTextField inputField, Field relatedModelField, Method getter, Method setter) {
 		super();
@@ -21,13 +22,21 @@ public class FieldInputPanel extends JPanel{
 		this.relatedModelField = relatedModelField;
 		this.setter = setter;
 		this.getter = getter;
-		
-		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		add(inputLabel);
-		add(this.inputField);
+		JPanel inputPanel = new JPanel(); 
+		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.LINE_AXIS));
+		inputPanel.add(inputLabel);
+		inputPanel.add(this.inputField);
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		add(inputPanel);
+		errorLabel = new JLabel("");
+		add(errorLabel);
 	}
 	
-	protected String getInputData() {
+	protected void setErrorText(String err) {
+		errorLabel.setText(err);
+		repaint();
+	}
+	protected String getInputString() {
 		return inputField.getText();	
 	}
 	

@@ -29,8 +29,13 @@ public class FormModelClassObjectFactory {
 					setter.invoke(object, inputData.getInput());
 				} 
 				
-				if ( setter.getAnnotation(Setter.class).targetClass().equals(int.class) ) {
-					setter.invoke(object, Integer.parseInt(inputData.getInput()) );
+				if ( setter.getAnnotation(Setter.class).targetClass().equals(int.class) && !inputData.getInput().isEmpty() ) {
+					try {
+						setter.invoke(object, Integer.parseInt(inputData.getInput()) );
+					} catch (NumberFormatException e) {
+						throw new IllegalArgumentException(e.getMessage());
+					}
+					
 				}
 			}
 		}

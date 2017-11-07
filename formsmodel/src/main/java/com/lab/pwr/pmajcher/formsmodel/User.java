@@ -1,7 +1,10 @@
 package com.lab.pwr.pmajcher.formsmodel;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 import annotations.FormInput;
 import annotations.FormModel;
@@ -20,25 +23,27 @@ public class User {
 	}
 	
 	@FormInput(inputLabel = "Name")
-    @NotNull
+    @NotEmpty
     private String name;
 
 	@FormInput(inputLabel = "Surname")
-    @NotNull
+    @NotEmpty
     private String surname;
 
 	@FormInput(inputLabel = "Password", isPasswordField = true)
-    @NotNull
+    @NotEmpty
+    @Length(min = 8, max = 50)
     private String password;
 
 	@FormInput(inputLabel = "Email")
-    @NotNull
+    @NotEmpty
     @Email
     private String email;
 
 	@FormInput(inputLabel = "Age")
     private int age;
 
+	@Getter(targetFieldName = "name", targetClass = String.class)
     public String getName() {
         return name;
     }

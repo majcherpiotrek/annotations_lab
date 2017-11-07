@@ -1,12 +1,17 @@
 package com.lab.pwr.pmajcher.annotationsgui;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.lab.pwr.pmajcher.annotationsgui.formpanel.FieldNotAccessibleException;
+import com.lab.pwr.pmajcher.annotationsgui.formpanel.FieldTypesNotSupportedException;
 import com.lab.pwr.pmajcher.annotationsgui.formpanel.FormModelClassObjectFactory;
 import com.lab.pwr.pmajcher.annotationsgui.formpanel.FormPanel;
 import com.lab.pwr.pmajcher.annotationsgui.formpanel.FormPanelFactory;
@@ -15,6 +20,7 @@ import com.lab.pwr.pmajcher.annotationsgui.formpanel.FormSubmitEventListener;
 import com.lab.pwr.pmajcher.annotationsgui.formpanel.InputData;
 import com.lab.pwr.pmajcher.annotationsgui.formpanel.InvalidFormDataModelException;
 
+import annotations.Getter;
 import customclassloader.CustomClassLoader;
 
 /**
@@ -40,10 +46,12 @@ public class App
 			e.printStackTrace();
 		} catch (FieldNotAccessibleException e) {
 			e.printStackTrace();
+		} catch (FieldTypesNotSupportedException e) {
+			e.printStackTrace();
 		}
     }
     
-    private static void createAndShowGUI(Class<?> modelClass) throws InvalidFormDataModelException, FieldNotAccessibleException {
+    private static void createAndShowGUI(Class<?> modelClass) throws InvalidFormDataModelException, FieldNotAccessibleException, FieldTypesNotSupportedException {
     	JFrame.setDefaultLookAndFeelDecorated(true);
 		JFrame mainFrame = new JFrame(APP_NAME);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,14 +60,24 @@ public class App
 			
 			@Override
 			public void onFormSubmitEvent(FormSubmitEvent e) {
-				List<InputData> inputs = e.getSource().getInputData();
-		
-				try {
-					Object obj = FormModelClassObjectFactory.createObject(modelClass, inputs);
-					System.out.println("Object created");
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException e1) {						// TODO Auto-generated catch block
-					e1.printStackTrace();
+				Object object = e.getSource().getFormObject();
+				System.out.println("Data submitted!\nObject:\n");
+				List<Method> methods = Arrays.asList(modelClass.getMethods());
+				methods = methods.stream()
+						.filter(m -> m.isAnnotationPresent(Getter.class))
+						.collect(Collectors.toList());
+				
+				for (Method m : methods) {
+					try {
+						Getter getter = m.getAnnotation(Getter.class);
+						System.out.println(getter.targetFieldName() + " : " + m.invoke(object));
+					} catch (IllegalArgumentException | IllegalAccessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (InvocationTargetException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

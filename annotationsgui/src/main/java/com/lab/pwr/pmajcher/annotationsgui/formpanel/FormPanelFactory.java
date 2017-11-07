@@ -25,7 +25,7 @@ public class FormPanelFactory {
 	private static final int COLUMNS = 2;
 	private static final int ADDITIONAL_ROWS = 3;
 
-	public static FormPanel createFormBasedOnDataModel(Class<?> dataModel, int inputFieldsWidth) throws InvalidFormDataModelException, FieldNotAccessibleException {
+	public static FormPanel createFormBasedOnDataModel(Class<?> dataModel, int inputFieldsWidth) throws InvalidFormDataModelException, FieldNotAccessibleException, FieldTypesNotSupportedException {
 			
 		if (!dataModel.isAnnotationPresent(FormModel.class)) {
 			throw new InvalidFormDataModelException("Model class has to be annotated with @FormModel annotation");
@@ -36,6 +36,10 @@ public class FormPanelFactory {
 				.stream()
 				.filter(field -> field.isAnnotationPresent(FormInput.class))
 				.collect(Collectors.toList());
+		
+		if (!areFieldTypesSupported(formFields)) {
+			throw new FieldTypesNotSupportedException();
+		}
 		
 		// ROWS = form inputs + title + prompt + submit button
 		// COLUMNS = labels + inputs
@@ -49,7 +53,6 @@ public class FormPanelFactory {
 		
 		List<FieldInputPanel> fieldInputPanelsList = new LinkedList<>();
 		for (Field field : formFields) {
-		
 			if (!isSettingFieldValuePossible(dataModel, field)) {
 				throw new FieldNotAccessibleException(field.getName());
 			}
@@ -69,6 +72,13 @@ public class FormPanelFactory {
 		formPanel.addFormElements(titleLabel, promptLabel, fieldInputPanelsList, submitButton);
 		
 		return formPanel;
+	}
+
+	private static boolean areFieldTypesSupported(List<Field> fields) {
+		fields = fields.stream()
+			.filter(field -> !FormPanel.supportedClasses.contains(field.getType()))
+			.collect(Collectors.toList());
+		return fields.isEmpty();
 	}
 
 	private static FieldInputPanel createFieldInputPanel(int inputFieldsWidth, Field field, Method getter, Method setter) {
