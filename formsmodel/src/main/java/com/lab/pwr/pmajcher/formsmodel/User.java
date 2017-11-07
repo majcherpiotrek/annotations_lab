@@ -3,13 +3,10 @@ package com.lab.pwr.pmajcher.formsmodel;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-import annotations.AgeField;
-import annotations.EmailField;
+import annotations.FormInput;
 import annotations.FormModel;
-import annotations.NameField;
-import annotations.PasswordField;
+import annotations.Getter;
 import annotations.Setter;
-import annotations.SurnameField;
 
 @FormModel(
         formTitle = "Registration",
@@ -22,24 +19,24 @@ public class User {
 		super();
 	}
 	
-    @NameField
+	@FormInput(inputLabel = "Name")
     @NotNull
     private String name;
 
-    @SurnameField
+	@FormInput(inputLabel = "Surname")
     @NotNull
     private String surname;
 
-    @PasswordField
+	@FormInput(inputLabel = "Password", isPasswordField = true)
     @NotNull
     private String password;
 
-    @EmailField
+	@FormInput(inputLabel = "Email")
     @NotNull
     @Email
     private String email;
 
-    @AgeField
+	@FormInput(inputLabel = "Age")
     private int age;
 
     public String getName() {
@@ -50,7 +47,8 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-
+    
+    @Getter(targetFieldName = "surname", targetClass = String.class)
     public String getSurname() {
         return surname;
     }
@@ -59,7 +57,8 @@ public class User {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-
+    
+    @Getter(targetFieldName = "password", targetClass = String.class)
     public String getPassword() {
         return password;
     }
@@ -68,7 +67,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    
+    @Getter(targetFieldName = "email", targetClass = String.class)
     public String getEmail() {
         return email;
     }
@@ -77,7 +77,8 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
+    @Getter(targetFieldName = "age", targetClass = int.class)
     public int getAge() {
         return age;
     }

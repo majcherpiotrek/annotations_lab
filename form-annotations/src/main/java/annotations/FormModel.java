@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FormModel {
     String formTitle();
-    String formPrompt();
+    String formPrompt() default "";
     String formSubmit();
 }
